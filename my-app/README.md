@@ -67,15 +67,6 @@ function App() {
 ## 模块联邦的原理和劣势
 Webpack 会把 ModuleFederationPlugin 选项配置了 expose的组件单独打包出一份chunk，如图一所示； 而如果把这份chunk的URL和filename配置在remote属性下，即表示webpack会帮你去请求这份代码，然后帮你挂载到全局变量，并解析放入你的组件中
 
-联邦模块能用来代替microApp吗？
-不能，两者不是同一生态位的应用， 联邦模块不具备样式隔离，监听路由等功能。但联邦模块可以与microApp结合使用。
-https://blog.csdn.net/weixin_43416349/article/details/127723624
-
-
-模块联邦，挂载window问题
-Webpack5 新功能 Module Federation 用法：
-https://juejin.cn/post/6910764120698519560
-
 
 
 ## 路由同步问题
@@ -92,9 +83,6 @@ https://juejin.cn/post/6910764120698519560
 如果不同的应用程序需要传达有关路由的相关信息，应尽可能的使用通用的方式，而 MemoryHistory 在 React 和 Vue 中都有提供。
 但是在react18后，使用react-dom/client导出ReactDOM，无法直接把ReactDOM.render内容expose出去，此方法不通，得用官网的loadComponent方法解决路由不同步问题，但主子路由也要注意，主子路由不能有多个BrowserHistory存在
 如果是react16-17，则可以参考micro-front-end-mfd-master项目，通过history.listen监听路由来解决主子应用路由不同步问题
-
-https://blog.csdn.net/u012961419/article/details/122946337
-https://jackchoumine.github.io/webpack/%E6%A8%A1%E5%9D%97%E8%81%94%E9%82%A6%E5%AE%9E%E7%8E%B0%E5%BE%AE%E5%89%8D%E7%AB%AF.html#%E6%A8%A1%E5%9D%97%E8%81%94%E9%82%A6%E7%9A%84%E9%85%8D%E7%BD%AE
 
 
 最后解决react18&react-routerV6主子应用路由不同步问题，还是得用官网的loadComponent方法，官网页提供了demo

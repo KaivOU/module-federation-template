@@ -18,16 +18,24 @@ In order to run the demo I highly recommend installing lerna globally via
 npm i -g lerna
 ```
 
-Then,
-
-```bash
-lerna bootstrap
-```
-
-Then,
+<!-- Then,
 
 ```bash
 ## 根目录yarn，lerna会安装各项目依赖
+## 该命令会做以下几件事：
+## `npm install` 每个软件包的所有外部依赖项；
+## 将所有 `packages` 相互依赖的Lerna `link` 在一起；
+## 在所有已安装的包里执行 `npm run prepublish`；
+## 在所有已安装的包里执行 `npm run prepare`；
+lerna bootstrap
+``` -->
+
+Then, 使用yarn安装
+
+```bash
+## 配置好package.json文件的"workspaces": {}
+## 根目录yarn，lerna会安装各项目依赖
+## node版本要大于18
 yarn
 ```
 
@@ -46,22 +54,6 @@ Lerna will start all your projects parallelly and open your browser.
 - http://localhost:3001/ (app1)
 - http://localhost:3002/ (app2)
 
-## Screenshots
-
-![App Screenshot](./app.png)
-
-## Tech Stack
-
-React, Typescript, Chakra UI, Webpack, Lerna, React Router V6
-
-## Article
-
-If you are curious about building this template head over to [Introduction to Micro Frontends with Module Federation, React and Typescript](https://ogzhanolguncu.com/blog/micro-frontends-with-module-federation)
-
-## Feedback
-
-If you have any feedback, please reach out to me or feel free to open up a issue.
-
 ## 坑
 1、
 ```ts
@@ -71,7 +63,7 @@ babel-loader@8 requires Babel 7.x (the package ‘@babel/core’). If you’d li
 container项目package加上"@babel/core": "^7.19.6"
 ```
 
-2、 各项目依赖不同版本包问题
+2、 各项目依赖不同版本包问题，配置后可直接在根目录yarn install安装所有子应用的依赖包
 ```ts
 lerna bootstrap
 lerna 提供了可以将子项目的依赖包提升到最顶层的方式 ，我们可以执行 lerna clean先删除每个子项目的 node_modules , 然后执行命令  lerna bootstrop --hoist。
@@ -94,13 +86,35 @@ yarn workspaces
 增加了这个配置后 不再需要 lerna bootstrap 来安装依赖了，可以直接使用 yarn install 进行依赖的安装。注意：yarn install 无论在顶层运行还是在任意一个子项目运行效果都是可以。
 ```
 
+3、应用位置问题，放packages目录里或者根目录
+```ts
+// 生成.git、.gitignore、lerna.json、package.json文件和packages目录
+// packages目录用于放子应用
+lerna init
+
+// package.json
+{
+  "name": "root",
+  "private": true,
+  // 配置子应用放到packages中
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.5.1"
+  }
+}
+
+// or
+// 此配置时，子应用放在根目录，与package.json同级
+"workspaces": {
+		"packages": [
+			"my-app",
+			"my-app-child",
+			"my-app-child2"
+		]
+	}
+```
+
 ## 其他
 lerna publish 永远不会发布标记为 private 的包（package.json中的”private“: true）
-
-## 参考资料
-【Lerna 基本使用】
-https://blog.csdn.net/dly15873944157/article/details/127439725
-lerna的基础使用
-http://events.jianshu.io/p/8b7e6025354b
-lerna官网
-https://gitcode.gitcode.host/docs-cn/lerna-docs-cn/commands/bootstrap/index.html
